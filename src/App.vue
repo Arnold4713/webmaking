@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { reactive, ref } from 'vue'
 import type { Task, TaskPriority } from './types/task'
 import TaskList from './components/TaskList.vue'
 import TaskModal from './components/TaskModal.vue'
 
-const tasks = ref<Task[]>([
+const tasks = reactive<Task[]>([
   {
     id: '1',
     title: '学习 Vue 3 Composition API',
@@ -23,40 +23,25 @@ const tasks = ref<Task[]>([
     dueDate: '2026-10-12',
     createdAt: '2026-09-26',
   },
-  {
-    id: '3',
-    title: '实现任务 CRUD 功能',
-    description: '包括创建、编辑、删除和状态切换',
-    status: 'todo',
-    priority: 'high',
-    dueDate: '2026-10-20',
-    createdAt: '2026-09-27',
-  },
-  {
-    id: '4',
-    title: '编写项目 README 文档',
-    description: '说明项目结构、启动方式和功能列表',
-    status: 'done',
-    priority: 'low',
-    dueDate: '2026-09-30',
-    createdAt: '2026-09-24',
-  },
 ])
 
 const showModal = ref(false)
 
-function handleToggle(id: string) {
-  const task = tasks.value.find(t => t.id === id)
+function toggleTask(id: string) {
+  const task = tasks.find(t => t.id === id)
   if (task) {
     task.status = task.status === 'done' ? 'todo' : 'done'
   }
 }
 
-function handleDelete(id: string) {
-  tasks.value = tasks.value.filter(t => t.id !== id)
+function deleteTask(id: string) {
+  const index = tasks.findIndex(t => t.id === id)
+  if (index !== -1) {
+    tasks.splice(index, 1)
+  }
 }
 
-function handleSubmit(data: { title: string; description: string; priority: TaskPriority }) {
+function addTask(data: { title: string; description: string; priority: TaskPriority }) {
   const now = new Date()
   const newTask: Task = {
     id: String(Date.now()),
@@ -67,7 +52,7 @@ function handleSubmit(data: { title: string; description: string; priority: Task
     dueDate: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
     createdAt: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
   }
-  tasks.value.unshift(newTask)
+  tasks.unshift(newTask)
   showModal.value = false
 }
 </script>
@@ -114,15 +99,15 @@ function handleSubmit(data: { title: string; description: string; priority: Task
       <!-- 任务列表组件 -->
       <TaskList
         :tasks="tasks"
-        @toggle="handleToggle"
-        @delete="handleDelete"
+        @toggle="toggleTask"
+        @delete="deleteTask"
       />
 
       <!-- 新建任务弹窗 -->
       <TaskModal
         :show="showModal"
         @close="showModal = false"
-        @submit="handleSubmit"
+        @submit="addTask"
       />
     </main>
   </div>
