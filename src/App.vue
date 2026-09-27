@@ -1,59 +1,19 @@
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
-import type { Task, TaskPriority } from './types/task'
+import { ref } from 'vue'
+import type { TaskPriority } from './types/task'
 import TaskList from './components/TaskList.vue'
 import TaskModal from './components/TaskModal.vue'
-
-const tasks = reactive<Task[]>([
-  {
-    id: '1',
-    title: '学习 Vue 3 Composition API',
-    description: '掌握 setup、ref、reactive 等核心概念',
-    status: 'in-progress',
-    priority: 'high',
-    dueDate: '2026-10-05',
-    createdAt: '2026-09-25',
-  },
-  {
-    id: '2',
-    title: '搭建 Tailwind CSS 组件库',
-    description: '封装常用 UI 组件，统一设计语言',
-    status: 'todo',
-    priority: 'medium',
-    dueDate: '2026-10-12',
-    createdAt: '2026-09-26',
-  },
-])
+import { getTasks, addTask, updateTask, deleteTask } from './stores/taskStore'
 
 const showModal = ref(false)
 
 function toggleTask(id: string) {
-  const task = tasks.find(t => t.id === id)
+  const task = getTasks().find(t => t.id === id)
   if (task) {
-    task.status = task.status === 'done' ? 'todo' : 'done'
+    updateTask(id, {
+      status: task.status === 'done' ? 'todo' : 'done',
+    })
   }
-}
-
-function deleteTask(id: string) {
-  const index = tasks.findIndex(t => t.id === id)
-  if (index !== -1) {
-    tasks.splice(index, 1)
-  }
-}
-
-function addTask(data: { title: string; description: string; priority: TaskPriority }) {
-  const now = new Date()
-  const newTask: Task = {
-    id: String(Date.now()),
-    title: data.title,
-    description: data.description,
-    status: 'todo',
-    priority: data.priority,
-    dueDate: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
-    createdAt: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
-  }
-  tasks.unshift(newTask)
-  showModal.value = false
 }
 </script>
 
@@ -72,15 +32,15 @@ function addTask(data: { title: string; description: string; priority: TaskPrior
       <!-- 统计卡片 -->
       <div class="grid grid-cols-3 gap-4 mb-8">
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
-          <p class="text-2xl font-bold text-indigo-600">{{ tasks.length }}</p>
+          <p class="text-2xl font-bold text-indigo-600">{{ getTasks().length }}</p>
           <p class="text-sm text-gray-500 mt-1">全部任务</p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
-          <p class="text-2xl font-bold text-amber-500">{{ tasks.filter(t => t.status === 'in-progress').length }}</p>
+          <p class="text-2xl font-bold text-amber-500">{{ getTasks().filter(t => t.status === 'in-progress').length }}</p>
           <p class="text-sm text-gray-500 mt-1">进行中</p>
         </div>
         <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
-          <p class="text-2xl font-bold text-emerald-500">{{ tasks.filter(t => t.status === 'done').length }}</p>
+          <p class="text-2xl font-bold text-emerald-500">{{ getTasks().filter(t => t.status === 'done').length }}</p>
           <p class="text-sm text-gray-500 mt-1">已完成</p>
         </div>
       </div>
@@ -98,7 +58,7 @@ function addTask(data: { title: string; description: string; priority: TaskPrior
 
       <!-- 任务列表组件 -->
       <TaskList
-        :tasks="tasks"
+        :tasks="getTasks()"
         @toggle="toggleTask"
         @delete="deleteTask"
       />
