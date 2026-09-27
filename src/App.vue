@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Task } from './types/task'
-import TaskCard from './components/TaskCard.vue'
+import TaskList from './components/TaskList.vue'
 
 const tasks = ref<Task[]>([
   {
@@ -82,16 +82,12 @@ function handleDelete(id: string) {
         </div>
       </div>
 
-      <!-- 任务卡片列表 -->
-      <div class="space-y-4">
-        <TaskCard
-          v-for="task in tasks"
-          :key="task.id"
-          :task="task"
-          @toggle="handleToggle"
-          @delete="handleDelete"
-        />
-      </div>
+      <!-- 任务列表组件 -->
+      <TaskList
+        :tasks="tasks"
+        @toggle="handleToggle"
+        @delete="handleDelete"
+      />
     </main>
   </div>
 </template>
