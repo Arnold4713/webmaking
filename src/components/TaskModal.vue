@@ -84,11 +84,11 @@ onUnmounted(() => {
 
         <!-- 弹窗内容 -->
         <div
-          class="relative w-full max-w-md mx-4 bg-white rounded-2xl shadow-xl p-6"
+          class="relative w-full max-w-md mx-4 bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6"
           @click.stop
         >
           <!-- 标题 -->
-          <h2 class="text-lg font-semibold text-gray-900 mb-6">
+          <h2 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-6">
             ✏️ 新建任务
           </h2>
 
@@ -96,7 +96,7 @@ onUnmounted(() => {
           <form @submit.prevent="handleSubmit" class="space-y-5">
             <!-- 标题 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 标题 <span class="text-red-500">*</span>
               </label>
               <input
@@ -107,7 +107,7 @@ onUnmounted(() => {
                 :class="[
                   titleError
                     ? 'border-red-400 focus:ring-2 focus:ring-red-200'
-                    : 'border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
+                    : 'border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200'
                 ]"
               />
               <p
@@ -120,25 +120,25 @@ onUnmounted(() => {
 
             <!-- 描述 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 描述
               </label>
               <textarea
                 v-model="form.description"
                 placeholder="请输入任务描述（选填）"
                 rows="3"
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 resize-none"
+                class="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 resize-none"
               ></textarea>
             </div>
 
             <!-- 优先级 -->
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                 优先级
               </label>
               <select
                 v-model="form.priority"
-                class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white"
+                class="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-gray-100 rounded-lg text-sm outline-none transition-colors focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 bg-white dark:bg-gray-700"
               >
                 <option value="low">低优先级</option>
                 <option value="medium">中优先级</option>
@@ -151,7 +151,7 @@ onUnmounted(() => {
               <button
                 type="button"
                 @click="handleClose"
-                class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                class="px-4 py-2 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
               >
                 取消
               </button>

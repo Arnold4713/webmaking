@@ -7,9 +7,9 @@ defineEmits<{
 }>()
 
 const columns = [
-  { status: 'todo' as const, label: '待办', color: 'bg-slate-100 border-slate-200', headerBg: 'bg-slate-500', dot: 'bg-slate-500' },
-  { status: 'in-progress' as const, label: '进行中', color: 'bg-indigo-50 border-indigo-200', headerBg: 'bg-indigo-500', dot: 'bg-indigo-500' },
-  { status: 'done' as const, label: '已完成', color: 'bg-emerald-50 border-emerald-200', headerBg: 'bg-emerald-500', dot: 'bg-emerald-500' },
+  { status: 'todo' as const, label: '待办', color: 'bg-slate-100 dark:bg-slate-900/60 border-slate-200 dark:border-slate-700', headerBg: 'bg-slate-500', dot: 'bg-slate-500' },
+  { status: 'in-progress' as const, label: '进行中', color: 'bg-indigo-50 dark:bg-indigo-950/50 border-indigo-200 dark:border-indigo-800', headerBg: 'bg-indigo-500', dot: 'bg-indigo-500' },
+  { status: 'done' as const, label: '已完成', color: 'bg-emerald-50 dark:bg-emerald-950/50 border-emerald-200 dark:border-emerald-800', headerBg: 'bg-emerald-500', dot: 'bg-emerald-500' },
 ]
 
 const borderColor: Record<string, string> = {
@@ -19,9 +19,9 @@ const borderColor: Record<string, string> = {
 }
 
 const priorityBg: Record<string, string> = {
-  high: 'bg-red-100 text-red-700',
-  medium: 'bg-yellow-100 text-yellow-700',
-  low: 'bg-green-100 text-green-700',
+  high: 'bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300',
+  medium: 'bg-yellow-100 dark:bg-yellow-900/40 text-yellow-700 dark:text-yellow-300',
+  low: 'bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300',
 }
 
 const priorityLabel: Record<string, string> = {
@@ -83,7 +83,7 @@ function onDragEnd() {
         :class="col.color"
       >
         <span class="w-2.5 h-2.5 rounded-full shrink-0" :class="col.dot"></span>
-        <h3 class="font-semibold text-sm text-gray-700">{{ col.label }}</h3>
+        <h3 class="font-semibold text-sm text-gray-700 dark:text-gray-300">{{ col.label }}</h3>
         <span
           class="ml-auto inline-flex items-center justify-center min-w-[22px] h-[22px] px-1.5 rounded-full text-xs font-medium text-white"
           :class="col.headerBg"
@@ -95,7 +95,7 @@ function onDragEnd() {
       <!-- 卡片列表 -->
       <div class="flex-1 p-3 space-y-3 overflow-y-auto">
         <div v-if="tasksByStatus(col.status).length === 0" class="text-center py-8">
-          <p class="text-xs text-gray-400">拖拽任务到此处</p>
+          <p class="text-xs text-gray-400 dark:text-gray-500">拖拽任务到此处</p>
         </div>
 
         <div
@@ -104,20 +104,20 @@ function onDragEnd() {
           draggable="true"
           @dragstart="onDragStart($event, task.id)"
           @dragend="onDragEnd"
-          class="bg-white rounded-lg shadow-sm border border-gray-200 border-l-4 p-4 hover:shadow-md transition-all duration-150 cursor-grab active:cursor-grabbing active:opacity-60"
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 border-l-4 p-4 hover:shadow-md transition-all duration-150 cursor-grab active:cursor-grabbing active:opacity-60"
           :class="borderColor[task.priority]"
         >
           <!-- 标题 -->
           <div class="flex items-start justify-between gap-2">
             <h4
-              class="text-sm font-medium text-gray-900 leading-snug"
-              :class="{ 'line-through text-gray-400': task.status === 'done' }"
+              class="text-sm font-medium text-gray-900 dark:text-gray-100 leading-snug"
+              :class="{ 'line-through text-gray-400 dark:text-gray-500': task.status === 'done' }"
             >
               {{ task.title }}
             </h4>
             <button
               @click="emit('delete', task.id)"
-              class="shrink-0 w-5 h-5 flex items-center justify-center text-gray-300 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors text-xs"
+              class="shrink-0 w-5 h-5 flex items-center justify-center text-gray-300 dark:text-gray-600 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/30 rounded-full transition-colors text-xs"
               title="删除"
             >
               ×
@@ -127,8 +127,8 @@ function onDragEnd() {
           <!-- 描述 -->
           <p
             v-if="task.description"
-            class="text-xs text-gray-500 mt-1.5 line-clamp-2 leading-relaxed"
-            :class="{ 'line-through text-gray-300': task.status === 'done' }"
+            class="text-xs text-gray-500 dark:text-gray-400 mt-1.5 line-clamp-2 leading-relaxed"
+            :class="{ 'line-through text-gray-300 dark:text-gray-600': task.status === 'done' }"
           >
             {{ task.description }}
           </p>
@@ -141,7 +141,7 @@ function onDragEnd() {
             >
               {{ priorityLabel[task.priority] }}
             </span>
-            <span class="text-xs text-gray-400">{{ task.dueDate }}</span>
+            <span class="text-xs text-gray-400 dark:text-gray-500">{{ task.dueDate }}</span>
           </div>
         </div>
       </div>

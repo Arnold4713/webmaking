@@ -4,6 +4,7 @@ import type { TaskPriority } from './types/task'
 import TaskList from './components/TaskList.vue'
 import TaskModal from './components/TaskModal.vue'
 import KanbanBoard from './components/KanbanBoard.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
 import { getTasks, addTask, updateTask, deleteTask } from './stores/taskStore'
 
 const showModal = ref(false)
@@ -20,12 +21,15 @@ function toggleTask(id: string) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors">
     <!-- 顶部导航栏 -->
     <header class="bg-indigo-600 text-white shadow-md">
       <div class="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
         <h1 class="text-xl font-bold tracking-tight">Vibe Coding Runoob</h1>
-        <span class="text-indigo-200 text-sm">任务管理</span>
+        <div class="flex items-center gap-3">
+          <span class="text-indigo-200 text-sm">任务管理</span>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
 
@@ -33,33 +37,33 @@ function toggleTask(id: string) {
     <main class="max-w-5xl mx-auto px-4 py-8">
       <!-- 统计卡片 -->
       <div class="grid grid-cols-3 gap-4 mb-8">
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 text-center">
           <p class="text-2xl font-bold text-indigo-600">{{ getTasks().length }}</p>
-          <p class="text-sm text-gray-500 mt-1">全部任务</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">全部任务</p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 text-center">
           <p class="text-2xl font-bold text-amber-500">{{ getTasks().filter(t => t.status === 'in-progress').length }}</p>
-          <p class="text-sm text-gray-500 mt-1">进行中</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">进行中</p>
         </div>
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 text-center">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 text-center">
           <p class="text-2xl font-bold text-emerald-500">{{ getTasks().filter(t => t.status === 'done').length }}</p>
-          <p class="text-sm text-gray-500 mt-1">已完成</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">已完成</p>
         </div>
       </div>
 
       <!-- 视图切换 Tab -->
-      <div class="flex gap-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit">
+      <div class="flex gap-1 mb-6 bg-gray-100 dark:bg-gray-800 rounded-lg p-1 w-fit">
         <button
           @click="currentView = 'list'"
           class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors"
-          :class="currentView === 'list' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+          :class="currentView === 'list' ? 'bg-white dark:bg-gray-700 text-indigo-600 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'"
         >
           列表
         </button>
         <button
           @click="currentView = 'kanban'"
           class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors"
-          :class="currentView === 'kanban' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+          :class="currentView === 'kanban' ? 'bg-white dark:bg-gray-700 text-indigo-600 shadow-sm' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200'"
         >
           看板
         </button>

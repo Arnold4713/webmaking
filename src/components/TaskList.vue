@@ -49,7 +49,7 @@ const filteredTasks = computed(() => {
         :class="
           activeFilter === opt.value
             ? 'bg-indigo-600 text-white shadow-sm'
-            : 'bg-white text-gray-600 border border-gray-200 hover:bg-gray-50'
+            : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700'
         "
       >
         {{ opt.label }}
@@ -70,7 +70,7 @@ const filteredTasks = computed(() => {
     <!-- 空状态 -->
     <div v-else class="text-center py-20">
       <div class="text-5xl mb-4">📋</div>
-      <p class="text-gray-400 text-sm">
+      <p class="text-gray-400 dark:text-gray-500 text-sm">
         还没有任务，点击下方按钮创建第一个吧
       </p>
     </div>
