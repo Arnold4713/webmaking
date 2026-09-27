@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { Task } from './types/task'
+import TaskCard from './components/TaskCard.vue'
 
 const tasks = ref<Task[]>([
   {
@@ -41,22 +42,15 @@ const tasks = ref<Task[]>([
   },
 ])
 
-const statusLabel: Record<string, string> = {
-  todo: '待办',
-  'in-progress': '进行中',
-  done: '已完成',
+function handleToggle(id: string) {
+  const task = tasks.value.find(t => t.id === id)
+  if (task) {
+    task.status = task.status === 'done' ? 'todo' : 'done'
+  }
 }
 
-const priorityColor: Record<string, string> = {
-  low: 'bg-gray-100 text-gray-600',
-  medium: 'bg-amber-100 text-amber-700',
-  high: 'bg-red-100 text-red-700',
-}
-
-const statusColor: Record<string, string> = {
-  todo: 'bg-slate-100 text-slate-600',
-  'in-progress': 'bg-indigo-100 text-indigo-700',
-  done: 'bg-emerald-100 text-emerald-700',
+function handleDelete(id: string) {
+  tasks.value = tasks.value.filter(t => t.id !== id)
 }
 </script>
 
@@ -90,41 +84,13 @@ const statusColor: Record<string, string> = {
 
       <!-- 任务卡片列表 -->
       <div class="space-y-4">
-        <div
+        <TaskCard
           v-for="task in tasks"
           :key="task.id"
-          class="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
-        >
-          <div class="flex items-start justify-between">
-            <div class="flex-1">
-              <div class="flex items-center gap-3 mb-2">
-                <h3
-                  class="font-semibold text-gray-900"
-                  :class="{ 'line-through text-gray-400': task.status === 'done' }"
-                >
-                  {{ task.title }}
-                </h3>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                  :class="statusColor[task.status]"
-                >
-                  {{ statusLabel[task.status] }}
-                </span>
-                <span
-                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                  :class="priorityColor[task.priority]"
-                >
-                  {{ task.priority === 'high' ? '高' : task.priority === 'medium' ? '中' : '低' }}
-                </span>
-              </div>
-              <p class="text-sm text-gray-500 mb-3">{{ task.description }}</p>
-              <div class="flex items-center gap-4 text-xs text-gray-400">
-                <span>📅 截止：{{ task.dueDate }}</span>
-                <span>🕐 创建：{{ task.createdAt }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          :task="task"
+          @toggle="handleToggle"
+          @delete="handleDelete"
+        />
       </div>
     </main>
   </div>
