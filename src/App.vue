@@ -3,9 +3,11 @@ import { ref } from 'vue'
 import type { TaskPriority } from './types/task'
 import TaskList from './components/TaskList.vue'
 import TaskModal from './components/TaskModal.vue'
+import KanbanBoard from './components/KanbanBoard.vue'
 import { getTasks, addTask, updateTask, deleteTask } from './stores/taskStore'
 
 const showModal = ref(false)
+const currentView = ref<'list' | 'kanban'>('list')
 
 function toggleTask(id: string) {
   const task = getTasks().find(t => t.id === id)
@@ -45,6 +47,24 @@ function toggleTask(id: string) {
         </div>
       </div>
 
+      <!-- 视图切换 Tab -->
+      <div class="flex gap-1 mb-6 bg-gray-100 rounded-lg p-1 w-fit">
+        <button
+          @click="currentView = 'list'"
+          class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors"
+          :class="currentView === 'list' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+        >
+          列表
+        </button>
+        <button
+          @click="currentView = 'kanban'"
+          class="px-4 py-1.5 text-sm font-medium rounded-md transition-colors"
+          :class="currentView === 'kanban' ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'"
+        >
+          看板
+        </button>
+      </div>
+
       <!-- 新建任务按钮 -->
       <div class="mb-6">
         <button
@@ -56,10 +76,17 @@ function toggleTask(id: string) {
         </button>
       </div>
 
-      <!-- 任务列表组件 -->
+      <!-- 列表视图 -->
       <TaskList
+        v-if="currentView === 'list'"
         :tasks="getTasks()"
         @toggle="toggleTask"
+        @delete="deleteTask"
+      />
+
+      <!-- 看板视图 -->
+      <KanbanBoard
+        v-if="currentView === 'kanban'"
         @delete="deleteTask"
       />
 
