@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Task } from './types/task'
+import type { Task, TaskPriority } from './types/task'
 import TaskList from './components/TaskList.vue'
+import TaskModal from './components/TaskModal.vue'
 
 const tasks = ref<Task[]>([
   {
@@ -42,6 +43,8 @@ const tasks = ref<Task[]>([
   },
 ])
 
+const showModal = ref(false)
+
 function handleToggle(id: string) {
   const task = tasks.value.find(t => t.id === id)
   if (task) {
@@ -51,6 +54,21 @@ function handleToggle(id: string) {
 
 function handleDelete(id: string) {
   tasks.value = tasks.value.filter(t => t.id !== id)
+}
+
+function handleSubmit(data: { title: string; description: string; priority: TaskPriority }) {
+  const now = new Date()
+  const newTask: Task = {
+    id: String(Date.now()),
+    title: data.title,
+    description: data.description,
+    status: 'todo',
+    priority: data.priority,
+    dueDate: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
+    createdAt: `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`,
+  }
+  tasks.value.unshift(newTask)
+  showModal.value = false
 }
 </script>
 
@@ -82,11 +100,29 @@ function handleDelete(id: string) {
         </div>
       </div>
 
+      <!-- 新建任务按钮 -->
+      <div class="mb-6">
+        <button
+          @click="showModal = true"
+          class="inline-flex items-center gap-1.5 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm"
+        >
+          <span class="text-lg leading-none">+</span>
+          新建任务
+        </button>
+      </div>
+
       <!-- 任务列表组件 -->
       <TaskList
         :tasks="tasks"
         @toggle="handleToggle"
         @delete="handleDelete"
+      />
+
+      <!-- 新建任务弹窗 -->
+      <TaskModal
+        :show="showModal"
+        @close="showModal = false"
+        @submit="handleSubmit"
       />
     </main>
   </div>
